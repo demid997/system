@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYMKIBY | Документ подписан</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #07070a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --accent-gold: #D4AF37;
+            --accent-glow: rgba(212, 175, 55, 0.4);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Фоновые декоративные элементы */
+        .bg-glow {
+            position: fixed;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Хедер */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: fadeInDown 1s ease forwards;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .status-badge {
+            background: rgba(0, 255, 100, 0.1);
+            border: 1px solid rgba(0, 255, 100, 0.3);
+            color: #00ff64;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff64;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Главный экран (Hero) */
+        .hero {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        .hero-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: stamp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transform: scale(0);
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.8s forwards;
+        }
+
+        /* Сетка достижений */
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 100px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-emoji {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* Блок статистики */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 50px 30px;
+            text-align: center;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.2s forwards;
+        }
+
+        .stat-item h2 {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            margin-bottom: 5px;
+        }
+
+        .stat-item span {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Футер и кнопки */
+        .footer-actions {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.5s forwards;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: #000;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 10px 30px var(--accent-glow);
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        /* Анимации */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes stamp {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 100, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 100, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 100, 0); }
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            header { margin-bottom: 40px; }
+            .hero { margin-bottom: 60px; }
+            .achievements { margin-bottom: 60px; }
+            .stat-item h2 { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <div class="container">
+        <!-- Хедер -->
+        <header>
+            <div class="logo">CYMKIBY</div>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                Документ подписан
+            </div>
+        </header>
+
+        <!-- Главный экран -->
+        <section class="hero">
+            <div class="hero-icon">✍️</div>
+            <h1>Спасибо за доверие!</h1>
+            <p>Документы успешно подписаны. Добро пожаловать в экосистему <strong style="color: var(--accent-gold);">CYMKIBY</strong>. Мы не просто фиксируем договоренности — мы создаем будущее вместе.</p>
+        </section>
+
+        <!-- Достижения -->
+        <section class="achievements">
+            <div class="card">
+                <span class="card-emoji">🏆</span>
+                <h3>Год безупречной работы</h3>
+                <p>365 дней синергии, стабильного роста и достижения амбициозных KPI. Мы задали новый стандарт качества на рынке и доказали, что надежность — это не просто слово, а наш главный актив.</p>
+            </div>
+            
+            <div class="card">
+                <span class="card-emoji">🧗‍♂️</span>
+                <h3>Выход из «неожиданной пропасти»</h3>
+                <p>Когда рынок штормило, мы не просто устояли на краю — мы использовали кризис как трамплин. Антихрупкость, стресс-тесты и молниеносная адаптация стали нашими лучшими инструментами.</p>
+            </div>
+            
+            <div class="card">
+                <span class="card-emoji">🧠</span>
+                <h3>AI-стратегия и предиктивный рост</h3>
+                <p>Мы внедряем нейросети и алгоритмы для прогнозирования трендов. Теперь наши партнеры получают эксклюзивную аналитику и автоматизацию, чтобы всегда быть на шаг впереди конкурентов.</p>
+            </div>
+        </section>
+
+        <!-- Статистика -->
+        <section class="stats">
+            <div class="stat-item">
+                <h2>100%</h2>
+                <span>Надежность</span>
+            </div>
+            <div class="stat-item">
+                <h2>24/7</h2>
+                <span>Поддержка</span>
+            </div>
+            <div class="stat-item">
+                <h2>x3</h2>
+                <span>Рост показателей</span>
+            </div>
+        </section>
+
+        <!-- Действия -->
+        <section class="footer-actions">
+            <div class="btn-group">
+                <a href="#" class="btn btn-primary">
+                    🚀 Вернуться в кабинет
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    📄 Скачать копию договора
+                </a>
+            </div>
+            <p class="copyright">© 2026 CYMKIBY. Все права защищены. Создано для лучших партнеров.</p>
+        </section>
+    </div>
+
+    <script>
+        // 1. Эффект конфетти при загрузке (празднование подписания)
+        window.addEventListener('load', () => {
+            const duration = 3 * 1000;
+            const animationEnd = Date.now() + duration;
+            const colors = ['#D4AF37', '#ffffff', '#ffb300'];
+
+            function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.6 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.6 },
+                    colors: colors
+                });
+
+                if (Date.now() < animationEnd) {
+                    requestAnimationFrame(frame);
+                }
+            }
+            
+            // Запуск с небольшой задержкой после появления печати
+            setTimeout(frame, 800);
+        });
+
+        // 2. Анимация появления карточек при скролле
+        const cards = document.querySelectorAll('.card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 200); // Задержка для каскадного эффекта
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        cards.forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>
