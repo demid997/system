@@ -3,433 +3,408 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYMKIBY | Документ подписан</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <title>CYMKIBY — спасибо</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,400&family=Inter:wght@400;500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #07070a;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --accent-gold: #D4AF37;
-            --accent-glow: rgba(212, 175, 55, 0.4);
-            --text-main: #ffffff;
-            --text-muted: #a0a0a0;
-            --border: rgba(255, 255, 255, 0.08);
+            --bg: #f2ede4;
+            --ink: #1a1a1a;
+            --accent: #e63946;
+            --muted: #6b6558;
+            --paper: #ebe5d8;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
             overflow-x: hidden;
-            line-height: 1.6;
+            line-height: 1.5;
+            /* Лёгкая текстура "бумаги" — чтобы не было пластикового ощущения */
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0,0,0,0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0,0,0,0.015) 0%, transparent 50%);
         }
 
-        /* Фоновые декоративные элементы */
-        .bg-glow {
+        /* Шум поверх всего — как зерно на плёнке */
+        body::before {
+            content: '';
             position: fixed;
-            top: -20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            opacity: 0.15;
-            z-index: 0;
+            inset: 0;
             pointer-events: none;
+            opacity: 0.35;
+            z-index: 100;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
         }
 
-        .container {
+        .wrap {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 40px 32px;
             position: relative;
             z-index: 1;
         }
 
-        /* Хедер */
-        header {
+        /* Верхняя полоска как в газете */
+        .topbar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 80px;
-            opacity: 0;
-            animation: fadeInDown 1s ease forwards;
+            align-items: baseline;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--ink);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            color: var(--accent-gold);
-            text-shadow: 0 0 10px var(--accent-glow);
-        }
+        .topbar .date { color: var(--muted); }
+        .topbar .issue { font-weight: 700; }
 
-        .status-badge {
-            background: rgba(0, 255, 100, 0.1);
-            border: 1px solid rgba(0, 255, 100, 0.3);
-            color: #00ff64;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #00ff64;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        /* Главный экран (Hero) */
+        /* Главный заголовок — огромный, как на обложке журнала */
         .hero {
-            text-align: center;
-            margin-bottom: 100px;
-        }
-
-        .hero-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            display: inline-block;
-            animation: stamp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            transform: scale(0);
+            padding: 80px 0 60px;
+            border-bottom: 1px solid rgba(26,26,26,0.2);
+            position: relative;
         }
 
         .hero h1 {
-            font-size: clamp(32px, 5vw, 56px);
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff 0%, var(--accent-gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.5s forwards;
+            font-family: 'Fraunces', serif;
+            font-weight: 300;
+            font-size: clamp(48px, 9vw, 140px);
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            margin-bottom: 30px;
         }
 
-        .hero p {
-            font-size: 18px;
-            color: var(--text-muted);
+        .hero h1 em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent);
+        }
+
+        .hero .sub {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: clamp(18px, 2.2vw, 24px);
+            color: var(--muted);
             max-width: 600px;
-            margin: 0 auto;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.8s forwards;
+            line-height: 1.4;
         }
 
-        /* Сетка достижений */
-        .achievements {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 100px;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 40px 30px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .card::before {
-            content: '';
+        /* Рукописная пометка на полях — как будто кто-то написал от руки */
+        .handwritten {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            top: 40px;
+            right: 20px;
+            font-family: 'Caveat', cursive;
+            font-size: 28px;
+            color: var(--accent);
+            transform: rotate(8deg);
+            opacity: 0.85;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(212, 175, 55, 0.3);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .card:hover::before {
-            opacity: 1;
-        }
-
-        .card-emoji {
-            font-size: 48px;
-            margin-bottom: 20px;
+        .handwritten::after {
+            content: '↑';
             display: block;
+            font-size: 40px;
+            margin-top: -10px;
+            margin-left: 20px;
         }
 
-        .card h3 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 15px;
-            line-height: 1.7;
-        }
-
-        /* Блок статистики */
-        .stats {
+        /* Личное письмо от основателя */
+        .letter {
+            padding: 80px 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(255,255,255,0.02) 100%);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 50px 30px;
-            text-align: center;
-            margin-bottom: 80px;
-            opacity: 0;
-            animation: fadeInUp 1s ease 1.2s forwards;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            border-bottom: 1px solid rgba(26,26,26,0.2);
         }
 
-        .stat-item h2 {
-            font-size: 42px;
-            font-weight: 900;
-            color: var(--accent-gold);
-            margin-bottom: 5px;
-        }
-
-        .stat-item span {
-            font-size: 14px;
-            color: var(--text-muted);
+        .letter-label {
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 3px;
+            color: var(--muted);
+            padding-top: 8px;
         }
 
-        /* Футер и кнопки */
-        .footer-actions {
-            text-align: center;
-            opacity: 0;
-            animation: fadeInUp 1s ease 1.5s forwards;
+        .letter-text {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(20px, 2.4vw, 28px);
+            font-weight: 300;
+            line-height: 1.45;
         }
 
-        .btn-group {
+        .letter-text p { margin-bottom: 24px; }
+        .letter-text p:last-child { margin-bottom: 0; }
+
+        .letter-text strong {
+            font-weight: 600;
+            background: linear-gradient(transparent 60%, rgba(230, 57, 70, 0.2) 60%);
+        }
+
+        .signature {
+            margin-top: 40px;
+            font-family: 'Caveat', cursive;
+            font-size: 36px;
+            color: var(--ink);
+        }
+
+        .signature small {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        /* Блок достижений — не карточки, а как статьи в журнале */
+        .stories {
+            padding: 80px 0;
+            border-bottom: 1px solid rgba(26,26,26,0.2);
+        }
+
+        .stories-header {
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 60px;
+        }
+
+        .stories-header h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 300;
+            font-size: clamp(32px, 5vw, 64px);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .stories-header .num {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        .story {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 40px;
+            padding: 40px 0;
+            border-top: 1px solid rgba(26,26,26,0.15);
+            align-items: start;
+        }
+
+        .story:last-child { border-bottom: 1px solid rgba(26,26,26,0.15); }
+
+        .story-num {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 48px;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .story-content h3 {
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: clamp(24px, 3vw, 36px);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+
+        .story-content p {
+            font-size: 16px;
+            color: var(--muted);
+            max-width: 640px;
+            line-height: 1.6;
+        }
+
+        /* Цитата во весь экран */
+        .quote {
+            padding: 120px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(26,26,26,0.2);
+        }
+
+        .quote blockquote {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 300;
+            font-size: clamp(28px, 4.5vw, 56px);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quote blockquote::before {
+            content: '«';
+            color: var(--accent);
+            font-size: 1.2em;
+        }
+        .quote blockquote::after {
+            content: '»';
+            color: var(--accent);
+            font-size: 1.2em;
+        }
+
+        /* Финальный блок — большой, простой */
+        .final {
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+
+        .final h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 300;
+            font-size: clamp(40px, 7vw, 96px);
+            line-height: 1;
+            letter-spacing: -0.03em;
             margin-bottom: 40px;
         }
 
-        .btn {
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
+        .final h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .final .stamp {
+            display: inline-block;
+            padding: 12px 28px;
+            border: 2px solid var(--ink);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            transform: rotate(-3deg);
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            padding-top: 40px;
+            border-top: 1px solid var(--ink);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--muted);
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .btn-primary {
-            background: var(--accent-gold);
-            color: #000;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 10px 30px var(--accent-glow);
-            transform: translateY(-3px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #fff;
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            border-color: #fff;
-            background: rgba(255,255,255,0.05);
-        }
-
-        .copyright {
-            color: var(--text-muted);
-            font-size: 13px;
-            opacity: 0.6;
-        }
-
-        /* Анимации */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes stamp {
-            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
-            60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
-            100% { transform: scale(1) rotate(0); opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 100, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 255, 100, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 100, 0); }
+        .footer .brand {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 18px;
+            color: var(--ink);
+            letter-spacing: 0;
+            text-transform: none;
         }
 
         /* Адаптив */
         @media (max-width: 768px) {
-            header { margin-bottom: 40px; }
-            .hero { margin-bottom: 60px; }
-            .achievements { margin-bottom: 60px; }
-            .stat-item h2 { font-size: 32px; }
+            .wrap { padding: 24px 20px; }
+            .letter { grid-template-columns: 1fr; gap: 20px; }
+            .story { grid-template-columns: 1fr; gap: 16px; }
+            .story-num { font-size: 36px; }
+            .handwritten { display: none; }
+            .topbar { flex-direction: column; gap: 8px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+<div class="wrap">
 
-    <div class="container">
-        <!-- Хедер -->
-        <header>
-            <div class="logo">CYMKIBY</div>
-            <div class="status-badge">
-                <div class="status-dot"></div>
-                Документ подписан
-            </div>
-        </header>
-
-        <!-- Главный экран -->
-        <section class="hero">
-            <div class="hero-icon">✍️</div>
-            <h1>Спасибо за доверие!</h1>
-            <p>Документы успешно подписаны. Добро пожаловать в экосистему <strong style="color: var(--accent-gold);">CYMKIBY</strong>. Мы не просто фиксируем договоренности — мы создаем будущее вместе.</p>
-        </section>
-
-        <!-- Достижения -->
-        <section class="achievements">
-            <div class="card">
-                <span class="card-emoji">🏆</span>
-                <h3>Год безупречной работы</h3>
-                <p>365 дней синергии, стабильного роста и достижения амбициозных KPI. Мы задали новый стандарт качества на рынке и доказали, что надежность — это не просто слово, а наш главный актив.</p>
-            </div>
-            
-            <div class="card">
-                <span class="card-emoji">🧗‍♂️</span>
-                <h3>Выход из «неожиданной пропасти»</h3>
-                <p>Когда рынок штормило, мы не просто устояли на краю — мы использовали кризис как трамплин. Антихрупкость, стресс-тесты и молниеносная адаптация стали нашими лучшими инструментами.</p>
-            </div>
-            
-            <div class="card">
-                <span class="card-emoji">🧠</span>
-                <h3>AI-стратегия и предиктивный рост</h3>
-                <p>Мы внедряем нейросети и алгоритмы для прогнозирования трендов. Теперь наши партнеры получают эксклюзивную аналитику и автоматизацию, чтобы всегда быть на шаг впереди конкурентов.</p>
-            </div>
-        </section>
-
-        <!-- Статистика -->
-        <section class="stats">
-            <div class="stat-item">
-                <h2>100%</h2>
-                <span>Надежность</span>
-            </div>
-            <div class="stat-item">
-                <h2>24/7</h2>
-                <span>Поддержка</span>
-            </div>
-            <div class="stat-item">
-                <h2>x3</h2>
-                <span>Рост показателей</span>
-            </div>
-        </section>
-
-        <!-- Действия -->
-        <section class="footer-actions">
-            <div class="btn-group">
-                <a href="#" class="btn btn-primary">
-                    🚀 Вернуться в кабинет
-                </a>
-                <a href="#" class="btn btn-secondary">
-                    📄 Скачать копию договора
-                </a>
-            </div>
-            <p class="copyright">© 2026 CYMKIBY. Все права защищены. Создано для лучших партнеров.</p>
-        </section>
+    <!-- Газетная шапка -->
+    <div class="topbar">
+        <div class="brand" style="font-family: 'Fraunces', serif; font-weight: 900; font-size: 18px; letter-spacing: 0; text-transform: none;">CYMKIBY</div>
+        <div class="issue">Выпуск №001 · для партнёров</div>
+        <div class="date">18 ноября 2026</div>
     </div>
 
-    <script>
-        // 1. Эффект конфетти при загрузке (празднование подписания)
-        window.addEventListener('load', () => {
-            const duration = 3 * 1000;
-            const animationEnd = Date.now() + duration;
-            const colors = ['#D4AF37', '#ffffff', '#ffb300'];
+    <!-- Главный экран -->
+    <section class="hero">
+        <div class="handwritten">подписали!</div>
+        <h1>Спасибо,<br>что <em>выбрали</em><br>нас.</h1>
+        <p class="sub">Документы подписаны. Теперь — самое интересное. Ниже коротко о том, кто мы, что умеем и почему с нами не бывает скучно.</p>
+    </section>
 
-            function frame() {
-                confetti({
-                    particleCount: 3,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0, y: 0.6 },
-                    colors: colors
-                });
-                confetti({
-                    particleCount: 3,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1, y: 0.6 },
-                    colors: colors
-                });
+    <!-- Личное письмо -->
+    <section class="letter">
+        <div class="letter-label">Письмо<br>от основателя</div>
+        <div class="letter-text">
+            <p>Знаете, что самое ценное в подписанном договоре? Не бумага. Не печать. А то, что <strong>два человека посмотрели друг другу в глаза и сказали: «работаем»</strong>.</p>
+            <p>Мы в CYMKIBY не любим пафосных презентаций про «синергию» и «лидерство рынка». Мы любим делать работу. Честно, в срок, и так, чтобы потом не было стыдно.</p>
+            <p>Этот год был непростым — но именно такие годы и показывают, кто есть кто. И мы, кажется, справились. Ниже — три истории, которыми мы по-настоящему гордимся.</p>
+            <div class="signature">
+                — основатель
+                <small>CYMKIBY · с 2025 года</small>
+            </div>
+        </div>
+    </section>
 
-                if (Date.now() < animationEnd) {
-                    requestAnimationFrame(frame);
-                }
-            }
-            
-            // Запуск с небольшой задержкой после появления печати
-            setTimeout(frame, 800);
-        });
+    <!-- Три истории -->
+    <section class="stories">
+        <div class="stories-header">
+            <h2>Три истории<br>за этот год</h2>
+            <div class="num">стр. 02 — 04</div>
+        </div>
 
-        // 2. Анимация появления карточек при скролле
-        const cards = document.querySelectorAll('.card');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 200); // Задержка для каскадного эффекта
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
+        <article class="story">
+            <div class="story-num">01</div>
+            <div class="story-content">
+                <h3>Год, который мы просто отработали</h3>
+                <p>Двенадцать месяцев без громких заявлений, но с сотней закрытых задач. Без срывов дедлайнов. Без «ой, а мы забыли». Скучно? Может быть. Но именно так и строится нормальное дело — день за днём, договор за договором.</p>
+            </div>
+        </article>
 
-        cards.forEach(card => observer.observe(card));
-    </script>
+        <article class="story">
+            <div class="story-num">02</div>
+            <div class="story-content">
+                <h3>Как мы вылезли из ямы, в которую сами же и упали</h3>
+                <p>Было дело — взяли на себя больше, чем могли утянуть. Не будем красиво говорить про «внешние обстоятельства». Ошиблись мы. Но вместо того чтобы прятаться, сели и разгребли. По пунктам. С каждым, кого это задело. И вылезли. Теперь знаем, где у нас потолок — и не прыгаем выше него.</p>
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-num">03</div>
+            <div class="story-content">
+                <h3>Запустили то, во что сами не верили до конца</h3>
+                <p>Одна штука, которую мы долго откладывали — «ещё не время», «ещё не готовы». А потом взяли и сделали. И она выстрелила. Вывод простой: иногда «готовы» не бывает. Бывает просто «сделали».</p>
+            </div>
+        </article>
+    </section>
+
+    <!-- Большая цитата -->
+    <section class="quote">
+        <blockquote>Работаем так, чтобы через год было что рассказать — и не стыдно было посмотреть в глаза</blockquote>
+    </section>
+
+    <!-- Финал -->
+    <section class="final">
+        <div class="stamp">✓ документ подписан</div>
+        <h2>Теперь <em>работаем.</em></h2>
+    </section>
+
+    <!-- Футер -->
+    <div class="footer">
+        <div class="brand">CYMKIBY</div>
+        <div>сделано людьми · для людей</div>
+        <div>© 2026</div>
+    </div>
+
+</div>
+
 </body>
 </html>
